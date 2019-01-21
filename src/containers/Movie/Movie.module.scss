@@ -4,8 +4,24 @@
     margin-left: auto;
     width: 1200px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
+    & >*{
+        flex: 1 1 50%;
+    }
+    @media only screen and(max-width: 1600px){
+        width: 1000px;
+    }
+    @media only screen and(max-width: 1400px){
+        width: 800px;
+    }
+    @media only screen and(max-width: 1200px){
+        align-items: center;
+        flex-direction: column;
+        & >*{
+            flex: 1 1 80%;
+        }
+    }
     &__imageBox{
         flex: 1 0 500px;
         width: 500px;

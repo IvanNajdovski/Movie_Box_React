@@ -3,6 +3,7 @@ import {FiSearch} from "react-icons/fi";
 import classes from './Input.module.scss'
 
 const input = (props) => {
+
     return(
         <form onSubmit={props.onSubmit} className={classes.Form}>
             <label style={{color: "#898989"}}><FiSearch/></label>
@@ -15,5 +16,5 @@ const input = (props) => {
                 placeholder={`Search ${props.mode === "movie" ? "Movies" : "Tv Shows"}`}/>
         </form>
     )
-}
+};
 export default input;

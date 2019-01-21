@@ -5,9 +5,7 @@ import MovieSearchCard from './MovieSearchCard/MovieSearchCard';
 const movieSearchList = (props) => {
     const movies = props.movies.map(movie => {
         return (
-
-                <MovieSearchCard movie={movie}/>
-
+                <MovieSearchCard key={movie.id} movie={movie}/>
         )
     });
     return (

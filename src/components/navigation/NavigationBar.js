@@ -3,12 +3,16 @@ import classes from './navigationBar.module.css';
 
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { modeChange } from '../../store/actions'
+import { modeChange, searchMoviesReset } from '../../store/actions'
 
 
 import NavigationItems from './NavigationItems/NavigationItems'
 
 class NavigationBar extends Component{
+    onModeChangeHandler = () => {
+        this.props.modeChange();
+        this.props.searchMoviesReset();
+    }
     render(){
         return(
             <header className={classes.NavigationContainer}>
@@ -21,7 +25,7 @@ class NavigationBar extends Component{
                         Home
                     </button>
 
-                    <button onClick={this.props.modeChange}>
+                    <button onClick={this.onModeChangeHandler}>
                         TV Shows
                     </button>
                     <NavigationItems>
@@ -32,4 +36,4 @@ class NavigationBar extends Component{
         )
     }
 }
-export default connect(null,{modeChange})(withRouter(NavigationBar));
+export default connect(null,{modeChange, searchMoviesReset})(withRouter(NavigationBar));

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from "../../axios/axiosOrders";
 import {connect} from 'react-redux';
-import {styleChangeDark} from "../../store/actions";
+import {styleChangeDark, trailerInit} from "../../store/actions";
 import updateObjectWithType from '../../utils/updateObjectWithType';
 
 import classes from './Movie.module.scss';
@@ -10,6 +10,8 @@ import MovieContent from '../../components/Content/MovieContent/MovieContent';
 import TvContent from '../../components/Content/TvContent/TvContent';
 import PersonContent from '../../components/Content/PersonContent/PersonContent';
 import SideCard from '../../components/SideCard/SideCard';
+import Backdrop from '../../components/UI/BackDrop/BackDrop';
+import Modal from '../../components/UI/Modal/Modal';
 
 
 class Movie extends Component {
@@ -79,6 +81,10 @@ class Movie extends Component {
             }
         }
     }
+    onTrailerHandler = () => {
+        this.props.trailerInit(this.props.match.params.type, this.props.match.params.id);
+
+    };
 
     render() {
 
@@ -88,10 +94,10 @@ class Movie extends Component {
         let data = null;
         if (this.state.similar && this.state.something && this.state.item) {
             if (this.props.match.params.type === "movie") {
-                content = <MovieContent item={this.state.item}/>
+                content = <MovieContent openTrailer={this.onTrailerHandler} item={this.state.item}/>
             }
             else if (this.props.match.params.type === "tv") {
-                content = <TvContent item={this.state.item}/>
+                content = <TvContent openTrailer={this.onTrailerHandler} item={this.state.item}/>
             }
             else if (this.props.match.params.type === "person") {
                 content = <PersonContent item={this.state.item}/>
@@ -100,7 +106,7 @@ class Movie extends Component {
                 <React.Fragment>
                     <SideCard left movie={this.state.similar[Math.floor(Math.random() * this.state.similar.length)]}/>
                     <SideCard movie={this.state.similar[Math.floor(Math.random() * this.state.similar.length)]}/>
-                    <div className={classes.Movie} style={{marginLeft: "auto", marginRight: "auto", width: "1200px"}}>
+                    <div className={classes.Movie}>
                         <div className={classes.Movie__imageBox}>
                             <div></div>
                             <img
@@ -120,7 +126,8 @@ class Movie extends Component {
         }
 
         return (
-            <div style={{backgroundColor: "#000"}}>
+            <div style={{backgroundColor: "#000", position: "relative"}}>
+                {this.props.showTrailer ? <Backdrop><Modal/></Backdrop> : null}
                 {data}
                 <h4>Featuring</h4>
                 {cast}
@@ -131,8 +138,9 @@ class Movie extends Component {
 
 const mapStateToProps = state => {
     return {
-        mode: state.movies.mode
+        mode: state.movies.mode,
+        showTrailer: state.trailer.show
     }
 };
 
-export default connect(mapStateToProps, {styleChangeDark})(Movie);
+export default connect(mapStateToProps, { styleChangeDark, trailerInit })(Movie);

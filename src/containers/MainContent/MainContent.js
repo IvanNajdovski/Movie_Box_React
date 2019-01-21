@@ -2,30 +2,34 @@ import React, {Component} from 'react';
 import classes from './MainContent.module.css';
 import axios from "../../axios/axiosOrders";
 import {connect} from 'react-redux';
-import {styleChangeLight} from '../../store/actions';
+import {
+    styleChangeLight,
+    searchMoviesByInput,
+    searchMoviesBySubtype,
+    searchTypeReset,
+    searchMoviesChangePage
+} from '../../store/actions';
 
 import Transition from 'react-transition-group/Transition';
+import Input from '../../components/UI/Input/Input';
+import InputWrapper from '../../components/UI/InputWrapper/InputWrapper';
 
 import PresentationBox from '../../components/PresentationBox/PresentationBox';
 import MovieList from '../../components/MovieList/MovieList';
 import updateObject from '../../utils/updateObjectWithGenreAndType';
-import updateObjectWithGender from '../../utils/updateObjectWithGenreAndType';
 import MovieSearchList from '../../components/MovieSearchList/MovieSearchList';
 import PageSearch from '../../components/UI/PageSearch/PageSearch';
-import Input from '../../components/UI/Input/Input';
-import InputWrapper from '../../components/UI/InputWrapper/InputWrapper';
+
 
 const MOVIE_SUBVALUES = [
     {value: "upcoming", displayValue: "Upcoming"},
     {value: "now_playing", displayValue: "In Cinemas"},
-    {value: "latest", displayValue: "Latest"},
     {value: "popular", displayValue: "Most Popular"},
     {value: "top_rated", displayValue: "Top Rated"},
 ];
 const TV_SUBVALUES = [
     {value: "airing_today", displayValue: "Coming Out Today"},
     {value: "on_the_air", displayValue: "Now Showing"},
-    {value: "latest", displayValue: "Latest"},
     {value: "popular", displayValue: "Most Popular"},
     {value: "top_rated", displayValue: "Top Rated"},
 ];
@@ -76,57 +80,21 @@ class MainContent extends Component {
                 });
         }
     }
+
     onChangeHandler = (e) => {
         this.setState({[e.target.name]: e.target.value})
     };
     onSubmitHandler = (e) => {
         e.preventDefault();
-        axios.get(`/search/${this.props.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${this.state.search}`)
-            .then(res => {
-                this.setState({
-                    searchedMovies: updateObjectWithGender(res.data.results, this.props.mode),
-                    page: res.data.page,
-                    totalPages: res.data.total_pages,
-                    searchType: "search"
-                });
-                console.log("[RESULTS ARE]", res.data)
-
-            })
+        this.props.searchMoviesByInput(this.state.search);
     };
     onSubmodeChangeHandler = (value) => {
-        axios.get(`/${this.props.mode}/${value}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-            .then(res => {
-                this.setState({
-                    searchedMovies: updateObjectWithGender(res.data.results, this.props.mode),
-                    page: res.data.page,
-                    totalPages: res.data.total_pages,
-                    searchType: "submode",
-                    searchValue: value
-                });
-
-            })
+        this.props.searchMoviesBySubtype(value);
     };
     onPageChangeHandler = (val) => {
-        if (this.state.searchType === 'submode') {
-            axios.get(`/${this.props.mode}/${this.state.searchValue}?api_key=ea5e1bdf1c365782c88c209eca44f80f&page=${val}`)
-                .then(res => {
-                    this.setState({
-                        searchedMovies: updateObjectWithGender(res.data.results, this.props.mode),
-                        page: res.data.page
-                    });
-
-                })
-        } else {
-            axios.get(`/search/${this.props.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${this.state.search}&page=${val}`)
-                .then(res => {
-                    this.setState({
-                        searchedMovies: updateObjectWithGender(res.data.results, this.props.mode),
-                        page: res.data.page,
-                        searchType: "null"
-                    });
-                })
-        }
+        this.props.searchMoviesChangePage(this.props.searchType,val,this.state.search);
     };
+
     render() {
         const navigation = this.props.mode === "movie" ? MOVIE_SUBVALUES : TV_SUBVALUES;
         const itemsSubmode = navigation.map((item, index) => {
@@ -136,8 +104,8 @@ class MainContent extends Component {
             )
         });
         let movies = null;
-        if (this.state.searchedMovies) {
-            movies = <MovieSearchList movies={this.state.searchedMovies}/>
+        if (this.props.searchedMovies) {
+            movies = <MovieSearchList movies={this.props.searchedMovies}/>
         }
         let presentationBox = <div></div>
         if (this.state.popular[3] && this.state.nowPlaying[3]) {
@@ -146,7 +114,7 @@ class MainContent extends Component {
                     <Transition
                         unmountOnExit
                         mountOnEnter
-                        in={!this.state.searchedMovies ? true : false}
+                        in={!this.props.searchedMovies ? true : false}
                         timeout={1000}>
                         {state => {
                             console.log(state)
@@ -161,7 +129,7 @@ class MainContent extends Component {
                     <Transition
                         unmountOnExit
                         mountOnEnter
-                        in={!this.state.searchedMovies ? true : false}
+                        in={!this.props.searchedMovies ? true : false}
                         timeout={1000}>
                         {state => (
                             <PresentationBox
@@ -192,12 +160,12 @@ class MainContent extends Component {
                     />
                 </InputWrapper>
                 <div className={classes.MainContentWrapper}>
-                    {this.state.totalPages ? <PageSearch page={this.state.page} total_pages={this.state.totalPages}
+                    {this.props.totalPages ? <PageSearch page={this.props.page} total_pages={this.props.totalPages}
                                                          pageChange={this.onPageChangeHandler}/> : null}
                     <Transition
                         unmountOnExit
                         mountOnEnter
-                        in={!this.state.searchedMovies ? true : false}
+                        in={!this.props.searchedMovies ? true : false}
                         timeout={1000}>
                         {state => (
                             <React.Fragment>
@@ -221,7 +189,18 @@ class MainContent extends Component {
 const mapStateToProps = state => {
     return {
         mode: state.movies.mode,
-        style: state.movies.style
+        style: state.movies.style,
+        searchedMovies: state.movies.searchedMovies,
+        page: state.movies.page,
+        totalPages: state.movies.totalPages,
+        searchType: state.movies.searchType,
+        searchValue: state.movies.searchValue
     }
 };
-export default connect(mapStateToProps, {styleChangeLight})(MainContent);
+export default connect(mapStateToProps, {
+    searchTypeReset,
+    styleChangeLight,
+    searchMoviesBySubtype,
+    searchMoviesByInput,
+    searchMoviesChangePage
+})(MainContent);
