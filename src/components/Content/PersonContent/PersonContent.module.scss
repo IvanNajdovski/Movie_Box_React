@@ -1,0 +1,33 @@
+.Content {
+  color: #fff;
+  padding: 100px;
+  //text-align: center;
+  & h1 {
+    color: #fff;
+    font-family: "Cinzel";
+  }
+  & h3{
+    color: #fff;
+    font-family: "Cinzel";
+  }
+  & p {
+    color: #fff;
+    font-size: 12px;
+    font-family: "Cinzel";
+    font-weight: 400;
+  }
+  & ul {
+    color: #fff;
+    list-style: none;
+    display: flex;
+    & li {
+      padding: 5px;
+      font-size: 12px;
+      font-family: "Cinzel";
+    }
+  }
+  & h4 {
+    color: #fff;
+    font-family: "Cinzel";
+  }
+}

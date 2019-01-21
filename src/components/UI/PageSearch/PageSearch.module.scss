@@ -1,0 +1,17 @@
+.PageSearch{
+  display: flex;
+  justify-content: center;
+  list-style: none;
+
+  &__item{
+    padding: 5px;
+    margin: 0 5px;
+    border: 1px solid black;
+    width: 30px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}

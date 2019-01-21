@@ -1,0 +1,20 @@
+.Companies{
+  padding: 0 10px;
+
+  &__imgWrapper{
+    text-align: center;
+    width: 100px;
+    background-color: #ccc;
+    padding: 20px;
+    & img{
+      width: 100%;
+    }
+  }
+}
+.CompniesWrapper{
+  display: flex;
+  flex-wrap: wrap;
+  & > *{
+    flex: 0 0 25%;
+  }
+}

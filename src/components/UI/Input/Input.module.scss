@@ -1,0 +1,12 @@
+.Form{
+  display: flex;
+  align-items: center;
+  &__Input{
+    font-weight: 900;
+    font-family: "Cinzel";
+    padding: 10px 5px 10px 5px;
+    background-color: #eeeeee;
+    outline: none;
+    border: none;
+  }
+}

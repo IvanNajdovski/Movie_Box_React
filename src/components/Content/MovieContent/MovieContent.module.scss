@@ -1,0 +1,40 @@
+.Content {
+  color: #fff;
+  padding: 0 100px;
+  //text-align: center;
+  & h1 {
+    color: #fff;
+    font-family: "Cinzel";
+  }
+  & p {
+    color: #fff;
+    font-size: 12px;
+    font-family: "Cinzel";
+    font-weight: 400;
+  }
+  & ul {
+    color: #fff;
+    list-style: none;
+    display: flex;
+    & li {
+      padding: 5px;
+      font-size: 12px;
+      font-family: "Cinzel";
+    }
+  }
+  & h4 {
+    padding: 0 10px;
+    color: #fff;
+    font-family: "Cinzel";
+  }
+  &__Links{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.Centered{
+  display: flex;
+  justify-content: center;
+}

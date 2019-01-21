@@ -1,0 +1,52 @@
+.MovieSearchCard{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 800px;
+  margin: 20px auto;
+  font-family: "Cinzel";
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  & h3{
+    color: #000;
+  }
+  &__box{
+    position: relative;
+    width: 600px;
+    height: 400px;
+  }
+  &__PosterLeft{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    clip-path: polygon(0% 10%, 100% 0%, 100% 80%, 0% 100%);
+    transition: all 1s ease-out;
+    z-index: 5;
+  }
+  &__hovered{
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transition: clip-path .5s ease-in-out;
+    z-index: 10;
+    //transform: translateY(100%);
+  }
+  &__PosterRight{
+    position: absolute;
+    z-index: 6;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    clip-path: polygon(0% 100%, 0% 100%, 100% 100%, 100% 0%);
+  }
+  &__Content{
+    padding: 10px;
+    width: 200px;
+  }
+}

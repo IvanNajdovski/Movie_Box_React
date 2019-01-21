@@ -1,0 +1,63 @@
+.Content {
+  color: #fff;
+  padding: 0 70px;
+  //text-align: center;
+  & h1 {
+    color: #fff;
+    font-family: "Cinzel";
+  }
+  & p {
+    color: #fff;
+    font-size: 12px;
+    font-family: "Cinzel";
+    font-weight: 400;
+  }
+  & ul {
+    color: #fff;
+    list-style: none;
+    display: flex;
+    & li {
+      padding: 5px;
+      font-size: 12px;
+      font-family: "Cinzel";
+    }
+  }
+  & h4 {
+    color: #fff;
+    font-family: "Cinzel";
+  }
+  &__Episodes{
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    & div{
+      box-sizing: border-box;
+    }
+    & h6{
+      white-space: nowrap;
+      font-family: "Cinzel";
+    }
+    & h5{
+      font-family: "Cinzel";
+    }
+    & p {
+      font-size: 10px;
+      padding-right: 10px;
+    }
+
+  }
+  & a {
+    color: #5b286e;
+    text-decoration: none;
+  }
+}
+.Centered{
+  display: flex;
+  justify-content: center;
+}
+.Content__Links{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

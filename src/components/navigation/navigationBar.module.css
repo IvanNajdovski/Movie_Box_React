@@ -1,0 +1,13 @@
+.NavigationContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    background-color: #ccc;
+}
+
+.NavigationNav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

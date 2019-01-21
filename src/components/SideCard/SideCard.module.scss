@@ -1,0 +1,62 @@
+.SideCard{
+  text-decoration: none;
+  height: 100%;
+  width: 200px;
+  position: absolute;
+  left: 10px;
+  top: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  & h4{
+    color: #6e5514;
+    text-align: center;
+    font-family: "Cinzel";
+
+  }
+
+  & h3{
+    color: #6e5514;
+    text-align: center;
+    font-family: "Cinzel";
+
+  }
+}
+.SideCardRight{
+  text-decoration: none;
+  height: 100%;
+  width: 200px;
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  & h4{
+    color: #6e5514;
+    text-align: center;
+    font-family: "Cinzel";
+
+  }
+
+  & h3{
+    color: #6e5514;
+    text-align: center;
+    font-family: "Cinzel";
+
+  }
+}
+.Ribon{
+  position: absolute;
+  top: 30px;
+  left: -10px;
+}
+

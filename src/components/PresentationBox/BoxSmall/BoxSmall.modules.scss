@@ -1,0 +1,25 @@
+.BoxSmall{
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  & div{
+    padding: 10px;
+    color: #fff;
+    & h3{
+      text-shadow: 0 0 0.2em #000, 0 0 0.2em #000,
+      0 0 0.2em #000;
+    }
+    & p{
+      width: 100%;
+      height: 20px;
+      overflow: hidden;
+      font-size: 12px;
+      text-shadow: 0 0 0.2em #000, 0 0 0.2em #000,
+      0 0 0.2em #000;
+    }
+  }
+
+}

@@ -1,0 +1,35 @@
+.BoxBig{
+    display: flex;
+    align-items: flex-end;
+    flex: 2;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    text-decoration: none;
+}
+.BoxBigInner{
+    color: #fff;
+    margin: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+.BoxBig img{
+
+    height: 120px;
+}
+.BoxBig p {
+
+    overflow: hidden;
+    font-size: 10px;
+    text-shadow: 0 0 0.2em #000, 0 0 0.2em #000,
+    0 0 0.2em #000;
+}
+.BoxBig h3{
+    font-size: 14px;
+    text-shadow: 0 0 0.2em #000, 0 0 0.2em #000,
+    0 0 0.2em #000;
+}
+
+

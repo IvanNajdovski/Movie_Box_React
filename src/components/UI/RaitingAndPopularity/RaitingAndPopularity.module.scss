@@ -1,0 +1,22 @@
+.Raiting{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  &__box{
+    flex: 1 1 50%;
+    padding: 0 20px;
+    text-align: center;
+  }
+}
+.Centered{
+  display: flex;
+  justify-content: center;
+}
+.Production{
+  flex: 1 1 50%;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
