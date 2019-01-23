@@ -1,3 +1,15 @@
+@keyframes scale {
+0%{
+  transform: scale(1);
+}
+  70%{
+    transform: scale(1.5);
+  }
+  100%{
+    transform: scale(1);
+  }
+
+}
 .Raiting__box{
     flex: 1 1 50%;
     padding: 0 20px;
@@ -6,4 +18,13 @@
 .Centered{
   display: flex;
   justify-content: center;
+}
+.Star{
+  margin: 0 3px;
+}
+.Animated{
+  animation: scale;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  margin: 0 3px ;
 }

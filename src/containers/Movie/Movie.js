@@ -1,9 +1,18 @@
 import React, {Component} from 'react';
-import axios from "../../axios/axiosOrders";
 import {connect} from 'react-redux';
-import {styleChangeDark, trailerInit} from "../../store/actions";
-import updateObjectWithType from '../../utils/updateObjectWithType';
+import {
+    resetSimilarMovies,
+    styleChangeDark,
+    resetData,
+    trailerInit,
+    setTypeAndId,
+    getMovie,
+    getSimilarMovies,
+    getCredits,
+    getCreditsForPerson
+} from "../../store/actions";
 
+import Loader from 'react-loader-spinner'
 import classes from './Movie.module.scss';
 import MovieList from "../../components/MovieList/MovieList";
 import MovieContent from '../../components/Content/MovieContent/MovieContent';
@@ -23,97 +32,78 @@ class Movie extends Component {
     };
 
     componentDidMount() {
-        this.props.styleChangeDark();
         const id = this.props.match.params.id;
         const type = this.props.match.params.type;
-        axios.get(`/${type}/${id}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-            .then(res => {
-                this.setState({item: res.data})
-            });
+        this.props.getMovie(type, id);
+        this.props.setTypeAndId(type, id);
+        this.props.styleChangeDark();
+
         if (this.props.match.params.type === "person") {
-            axios.get(`/${type}/${id}/movie_credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                .then(res => {
-                    let movieItems = updateObjectWithType(res.data.cast, "movie");
-                    axios.get(`/${type}/${id}/tv_credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                        .then(res => {
-                            let tvItems = updateObjectWithType(res.data.cast, "tv");
-                            const items = [...movieItems, ...tvItems];
-                            this.setState({something: items, similar: []})
-                        })
-                })
+            this.props.resetSimilarMovies();
+            this.props.getCreditsForPerson(type, id)
         } else {
-            axios.get(`/${type}/${id}/similar?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                .then(res => {
-                    this.setState({similar: res.data.results})
-                });
-            axios.get(`/${type}/${id}/credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                .then(response => {
-                    let items = updateObjectWithType(response.data.cast, "person");
-                    this.setState({something: items})
-                })
+            this.props.getSimilarMovies(type, id);
+            this.props.getCredits(type, id, "person")
+
         }
+    }
+
+    componentWillUpdate() {
+        //this.props.resetData();
     }
 
     componentDidUpdate(nextProps) {
+
         if (this.props.match.params.id !== nextProps.match.params.id) {
+
             const id = this.props.match.params.id;
             const type = this.props.match.params.type;
-            axios.get(`/${type}/${id}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                .then(res => {
-                    this.setState({item: res.data})
-                });
+            this.props.getMovie(type, id);
             if (this.props.match.params.type === "person") {
-                axios.get(`/${type}/${id}/movie_credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                    .then(res => {
-                        this.setState({something: updateObjectWithType(res.data.cast, "movie"), similar: []})
-                    })
+                this.props.resetSimilarMovies();
+                this.props.getCredits(type, id, "movie")
             } else {
-                axios.get(`/${type}/${id}/similar?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                    .then(res => {
-                        this.setState({similar: res.data.results})
-
-                    });
-                axios.get(`/${type}/${id}/credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                    .then(response => {
-                        let items = updateObjectWithType(response.data.cast, "person");
-                        this.setState({something: items})
-                    })
+                this.props.getSimilarMovies(type, id);
+                this.props.getCredits(type, id, "person")
             }
         }
     }
+
     onTrailerHandler = () => {
         this.props.trailerInit(this.props.match.params.type, this.props.match.params.id);
 
     };
 
     render() {
-
         let content = null;
-
         let cast = [];
         let data = null;
-        if (this.state.similar && this.state.something && this.state.item) {
-            if (this.props.match.params.type === "movie") {
-                content = <MovieContent openTrailer={this.onTrailerHandler} item={this.state.item}/>
+        if (this.props.movie) {
+            if (this.props.movie.type === "movie") {
+                content = <MovieContent openTrailer={this.onTrailerHandler} item={this.props.movie}/>
             }
-            else if (this.props.match.params.type === "tv") {
-                content = <TvContent openTrailer={this.onTrailerHandler} item={this.state.item}/>
+            else if (this.props.movie.type === "tv") {
+                content = <TvContent openTrailer={this.onTrailerHandler} item={this.props.movie}/>
             }
-            else if (this.props.match.params.type === "person") {
-                content = <PersonContent item={this.state.item}/>
+            else if (this.props.movie.type === "person") {
+                content = <PersonContent item={this.props.movie}/>
             }
+        }
+        if (this.props.similarMovies && this.props.credits && this.props.movie) {
             data = (
                 <React.Fragment>
-                    <SideCard left movie={this.state.similar[Math.floor(Math.random() * this.state.similar.length)]}/>
-                    <SideCard movie={this.state.similar[Math.floor(Math.random() * this.state.similar.length)]}/>
+                    <SideCard left
+                              movie={this.props.similarMovies[Math.floor(Math.random() * this.props.similarMovies.length)]}/>
+                    <SideCard
+                        movie={this.props.similarMovies[Math.floor(Math.random() * this.props.similarMovies.length)]}/>
                     <div className={classes.Movie}>
                         <div className={classes.Movie__imageBox}>
                             <div></div>
                             <img
-                                src={this.state.item.poster_path ? `https://image.tmdb.org/t/p/w500${this.state.item.poster_path}` : `https://image.tmdb.org/t/p/w500${this.state.item.profile_path}`}
+                                src={this.props.movie.poster_path ? `https://image.tmdb.org/t/p/w500${this.props.movie.poster_path}` : `https://image.tmdb.org/t/p/w500${this.props.movie.profile_path}`}
                                 alt={"Movie Poster"}/>
-                            {this.state.item.homepage ? <h4>Visit Site: <a
-                                href={this.state.item.homepage}>{this.state.item.title || this.state.item.name}</a>
+                            {this.props.movie.homepage ? <h4>Visit Site: <a
+                                href={this.props.movie.homepage}>{this.props.movie.title || this.props.movie.name}</a>
                             </h4> : null}
                         </div>
                         <div className={classes.MovieContent}>
@@ -122,11 +112,12 @@ class Movie extends Component {
                     </div>
                 </React.Fragment>
             )
-            cast = <MovieList mode={this.props.mode} movies={this.state.something}/>
+            cast = <MovieList mode={this.props.mode} movies={this.props.credits}/>
         }
 
         return (
             <div style={{backgroundColor: "#000", position: "relative"}}>
+                <Loader type="Triangle" color="#fff" height={80} width={80} />
                 {this.props.showTrailer ? <Backdrop><Modal/></Backdrop> : null}
                 {data}
                 <h4>Featuring</h4>
@@ -139,8 +130,21 @@ class Movie extends Component {
 const mapStateToProps = state => {
     return {
         mode: state.movies.mode,
-        showTrailer: state.trailer.show
+        showTrailer: state.trailer.show,
+        movie: state.movie.movie,
+        similarMovies: state.movie.similarMovies,
+        credits: state.movie.credits
     }
 };
 
-export default connect(mapStateToProps, { styleChangeDark, trailerInit })(Movie);
+export default connect(mapStateToProps, {
+    getCredits,
+    styleChangeDark,
+    trailerInit,
+    setTypeAndId,
+    getMovie,
+    getSimilarMovies,
+    getCreditsForPerson,
+    resetData,
+    resetSimilarMovies
+})(Movie);

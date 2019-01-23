@@ -10,6 +10,7 @@
     "react-circular-progressbar": "^1.0.0",
     "react-dom": "^16.7.0",
     "react-icons": "^3.3.0",
+    "react-loader-spinner": "^2.3.0",
     "react-progressbar.js": "^0.2.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",

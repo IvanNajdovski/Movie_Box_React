@@ -19,8 +19,16 @@
     font-size: 12px;
     font-weight: 900;
     padding: 0px 5px;
-
+    outline: none;
+    border: none;
+    background-color: inherit;
     display: inline-block;
+
+}
+.SubmodeItems:disabled{
+
+    color: #7b7b7b;
+    cursor: not-allowed;
 
 }
 .SubmodeList{

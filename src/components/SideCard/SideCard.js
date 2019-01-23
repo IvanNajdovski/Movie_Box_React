@@ -13,9 +13,9 @@ class SideCard extends Component {
         } else {
 
             return (
-                <Link to={`/${this.props.match.params.type}/${this.props.movie.id}`}
+                <Link to={`/${this.props.movie.type}/${this.props.movie.id}`}
                       className={this.props.left ? classes.SideCard : classes.SideCardRight}
-                      style={{backgroundImage: `linear-gradient( to left, rgba(0,0,0, 0.8) 0%, rgba(0,0,0, 0.2) 50%, rgba(0,0,0, 0.8) 90%), linear-gradient( to bottom, rgba(0,0,0, 0.5) 0%, rgba(0,0,0, 0.8) 50%, rgba(0,0,0, 1) 100%), url("https://image.tmdb.org/t/p/w500${this.props.movie.poster_path}")`}}>
+                      style={{backgroundImage: `linear-gradient( to left, rgba(0,0,0, 0.8) 0%, rgba(0,0,0, 0.2) 50%, rgba(0,0,0, 0.8) 90%), linear-gradient( to bottom, rgba(0,0,0, .8) 0%, rgba(0,0,0, 0.4) 50%, rgba(0,0,0, .8) 100%), url("https://image.tmdb.org/t/p/w500${this.props.movie.poster_path}")`}}>
                     {this.props.left ? <img alt={"ribon"} src={ribon} className={classes.Ribon}/> : null}
                     <h4>{this.props.movie.title || this.props.movie.name}</h4>
                     <h3>Raiting</h3>

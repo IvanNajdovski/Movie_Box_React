@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
-import movieReducer from './movieReducer';
+import moviesReducer from './moviesReducer';
 import trailerReducer from './trailerReducer';
-
+import movieReducer from './movieReducer';
 
 export const rootReducer = combineReducers({
-    movies: movieReducer,
-    trailer: trailerReducer
+    movies: moviesReducer,
+    trailer: trailerReducer,
+    movie: movieReducer
 
 });

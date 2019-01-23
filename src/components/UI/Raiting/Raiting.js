@@ -1,35 +1,58 @@
-import React from 'react';
-import classes from './Raiting.module.scss'
+import React, {Component} from 'react';
 import raitingPic from '../../../assets/Raiting.png';
 import empty from '../../../assets/Empty.png';
-import Transition from 'react-transition-group/Transition';
+import classes from './Raiting.module.scss'
 
-const raiting = (props) => {
-    let raiting = [];
-    for(let i = 0; i < 5; i++){
-        if(props.vote > i * 2){
-            raiting.push("raiting")
-        }else{
-            raiting.push("empty")
+class Raiting extends Component {
+    state = {
+        animate: false
+    };
+    animateFalse = () => {
+        this.setState({animate: false})
+    };
+    animateTrue = () => {
+        this.setState({animate: true})
+    };
+
+    render() {
+        let raiting = [];
+        for (let i = 0; i < 5; i++) {
+            if (this.props.vote > i * 2) {
+                raiting.push("raiting")
+            } else {
+                raiting.push("empty")
+            }
         }
-    }
-    const raitingObject = raiting.map( (item, index) => {
-        if(item === "raiting"){
-            return(<div key={index} style={{flex: "0 0 12%"}}><img style={{width: "100%"}} src={raitingPic} alt={""}/></div>)
-        }else{
-            return(<div key={index} style={{flex: "0 0 12%"}}><img style={{width: "100%"}} src={empty} alt={""}/></div>)
+        const raitingObject = raiting.map((item, index) => {
+            if (item === "raiting") {
+                return (
+                    <div
+                        key={index}
+                        className={this.state.animate ? classes.Animated : classes.Star}
+                        style={{
+                            flex: "0 0 12%",
+                            animationDelay: index * 0.15 + 0.2 + "s"
+                        }}><img style={{width: "100%"}} src={raitingPic} alt={""}/></div>
+                )
+            } else {
+                return (
+                    <div className={classes.Star} key={index} style={{flex: "0 0 12%"}}><img style={{width: "100%"}} src={empty} alt={""}/>
+                    </div>)
+            }
+        });
+        let raitingVote = <p>Raitng <span>{this.props.vote}</span> From <span>{this.props.count}</span> Users</p>
+        if (this.props.raitingOnly) {
+            raitingVote = <p>Raitng <span>{this.props.vote}</span></p>
         }
-    })
-    let raitingVote = <p>Raitng <span>{props.vote}</span> From <span>{props.count}</span> Users</p>
-    if(props.raitingOnly){ raitingVote =  <p>Raitng <span>{props.vote}</span></p>}
-    return(
-        <div className={classes.Raiting__box}>
-            {raitingVote}
-            <div className={classes.Centered}>
-                {raitingObject}
+        return (
+            <div className={classes.Raiting__box} onMouseLeave={this.animateFalse} onMouseEnter={this.animateTrue}>
+                {raitingVote}
+                <div className={classes.Centered}>
+                    {raitingObject}
+                </div>
             </div>
+        )
+    }
+}
 
-        </div>
-    )
-};
-export default raiting;
+export default Raiting;

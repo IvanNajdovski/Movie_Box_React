@@ -1,96 +1,90 @@
 import * as actionTypes from './actionTypes';
 import axios from "../../axios/axiosOrders";
+import updateObjectWithType from "../../utils/updateObjectWithType";
 
-export const modeChange = () => {
+const setMovie = (data) => {
+    console.log("[DATA]",data)
     return {
-        type: actionTypes.CHANGE_MODE
-    }
-};
-export const styleChangeDark = () => {
-    return {
-        type: actionTypes.CHANGE_STYLE_DARK
-    }
-};
-export const styleChangeLight = () => {
-    return {
-        type: actionTypes.CHANGE_STYLE_LIGHT
-    }
-};
-const searchMoviesByInputSuccess = (data, page, total_pages) => {
-    return {
-        type: actionTypes.SEARCH_MOVIES_BY_INPUT_SUCCESS,
+        type: actionTypes.SET_MOVIE,
         payload: {
-            searchedMovies: data,
-            page,
-            totalPages: total_pages
+            data
         }
     }
 };
-export const searchMoviesByInput = (input) => {
-    return (dispatch, getState) => {
-        let state = getState();
-        axios.get(`/search/${state.movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}`)
+export const setTypeAndId = (type, id) => {
+    return{
+        type: actionTypes.SET_TYPE_AND_ID,
+        payload: {
+            type,
+            id
+        }
+    }
+};
+export const getMovie = (type, id) => {
+    return dispatch => {
+        axios.get(`/${type}/${id}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(res => {
-                dispatch(searchMoviesByInputSuccess(res.data.results, res.data.page, res.data.total_pages));
-            })
-            .catch(err => {
-                console.log(err)
-            })
+                dispatch(setMovie({...res.data, type}))
+            });
     }
 };
-export const searchMoviesBySubtypeSuccess = (data, page, total_pages, value) => {
-    return {
-        type: actionTypes.SEARCH_MOVIES_BY_SUBTYPE_SUCCESS,
+const setSimilarMovies = data => {
+    return{
+        type:actionTypes.SET_SIMILAR_MOVIES,
         payload: {
-            searchedMovies: data,
-            page,
-            totalPages: total_pages,
-            value
+            data
         }
     }
 };
-export const searchMoviesBySubtype = (val) => {
-    return (dispatch, getState) => {
-        axios.get(`${getState().movies.mode}/${val}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+export const getSimilarMovies = (type, id) => {
+    return dispatch =>{
+        axios.get(`/${type}/${id}/similar?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(res => {
-                dispatch(searchMoviesBySubtypeSuccess(res.data.results, res.data.page, res.data.total_pages, val));
+                const similarMovies = updateObjectWithType(res.data.results, type)
+                console.log(res.data)
+                dispatch(setSimilarMovies(similarMovies))
+            });
+    }
+};
+const setCredits = (data) => {
+    return{
+        type: actionTypes.SET_CREDITS,
+        payload: {
+            data
+        }
+    }
+};
+export const getCredits = (type, id, credit) => {
+    console.log(credit)
+    return dispatch => {
+        axios.get(`/${type}/${id}/${credit !== "person" ? `${credit}_` : "" }credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+            .then(response => {
+                let items = updateObjectWithType(response.data.cast, credit);
+                dispatch(setCredits(items))
             })
     }
-}
-export const searchMoviesReset = () => {
-    return {
-        type: actionTypes.SEARCH_MOVIES_RESET
+};
+export const getCreditsForPerson = (type,id) => {
+    return dispatch => {
+        axios.get(`/${type}/${id}/movie_credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+            .then(res => {
+                let movieItems = updateObjectWithType(res.data.cast, "movie");
+                axios.get(`/${type}/${id}/tv_credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+                    .then(res => {
+                        let tvItems = updateObjectWithType(res.data.cast, "tv");
+                        const items = [...movieItems, ...tvItems];
+                        dispatch(setCredits(items))
+                    })
+            })
     }
 };
-export const searchTypeReset = () => {
-    return {
-        type: actionTypes.SEARCH_TYPE_RESET
+export const resetData = () => {
+    return{
+        type: actionTypes.RESET_DATA
     }
 };
-const searchMoviesChangePageSuccess = (data, page) => {
-    return {
-        type: actionTypes.SEARCH_MOVIES_CHANGE_PAGE_SUCCESS,
-        payload: {
-            searchedMovies: data,
-            page
-        }
-    }
-};
-export const searchMoviesChangePage = (type, val, input) => {
-    if (type === "subtype") {
-        return (dispatch, getState) => {
-            axios.get(`/${getState().movies.mode}/${getState().movies.searchValue}?api_key=ea5e1bdf1c365782c88c209eca44f80f&page=${val}`)
-                .then(res => {
-                    dispatch(searchMoviesChangePageSuccess(res.data.results, res.data.page));
-                })
-        }
-    } else {
-        return (dispatch, getState) => {
-            axios.get(`/search/${getState.movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}&page=${val}`)
-                .then(res => {
-                    dispatch(searchMoviesChangePageSuccess(res.data.results, res.data.page));
-                    dispatch(searchTypeReset())
-                })
-        }
+export const resetSimilarMovies = () => {
+    return{
+        type: actionTypes.RESET_SIMILAR_MOVIES
     }
 }

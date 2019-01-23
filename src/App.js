@@ -6,9 +6,12 @@ import './App.css';
 import NavigationBar from './components/navigation/NavigationBar';
 import MainContent from './containers/MainContent/MainContent';
 import Movie from "./containers/Movie/Movie";
+import Footer from './components/Footer/Footer';
 
 class App extends Component {
-
+    componentWillUnmount(){
+        localStorage.removeItem("genders");
+    }
 
     render() {
         return (
@@ -19,6 +22,7 @@ class App extends Component {
                     <Route path={"/:type/:id"} component={Movie}/>
                     <Redirect to={"/"}/>
                 </Switch>
+                <Footer/>
             </div>
         );
     }
