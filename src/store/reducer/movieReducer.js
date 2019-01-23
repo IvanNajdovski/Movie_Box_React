@@ -5,7 +5,9 @@ const initialState = {
     id:"",
     movie: null,
     similarMovies: null,
-    credits: null
+    credits: null,
+    loading: false,
+    error: true
 };
 
 export default (state = initialState, action) => {
@@ -22,6 +24,14 @@ export default (state = initialState, action) => {
             return{...state, movie: null, similarMovies: null, credits: null};
         case actionTypes.RESET_SIMILAR_MOVIES:
             return{...state, similarMovies: []};
+        case actionTypes.LOADING_TRUE:
+            return{...state, loading: true};
+        case actionTypes.LOADING_FALSE:
+            return{...state, loading: false};
+        case actionTypes.ERROR_TRUE:
+            return{...state, error: true};
+        case actionTypes.ERROR_FALSE:
+            return{...state, error: false};
         default:
             return state
     }

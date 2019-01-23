@@ -18,7 +18,7 @@ export const styleChangeLight = () => {
     }
 };
 const setMovies = (movies) => {
-    return{
+    return {
         type: actionTypes.SET_MOVIES,
         payload: {
             movies
@@ -26,14 +26,34 @@ const setMovies = (movies) => {
     }
 
 };
-export const searchModeToggle = () => {
+const loadingTrue = () => {
+    return {
+        type: actionTypes.LOADING_TRUE
+    }
+};
+const loadingFalse = () => {
+    return {
+        type: actionTypes.LOADING_FALSE
+    }
+};
+const errorTrue = () => {
     return{
+        type: actionTypes.ERROR_TRUE
+    }
+};
+const errorFalse = () => {
+    return{
+        type: actionTypes.ERROR_FALSE
+    }
+};
+export const searchModeToggle = () => {
+    return {
         type: actionTypes.SEARCH_MODE_TOGGLE
     }
 };
 export const initialSearchType = (movie, tv) => {
 
-    return{
+    return {
         type: actionTypes.INITIAL_SEARCH,
         payload: {
             movie,
@@ -44,23 +64,35 @@ export const initialSearchType = (movie, tv) => {
 
 export const getMoviesInit = (type) => {
 
-  return (dispatch, getState) => {
-      let movies = []
-      axios.get(`/${getState().movies.mode}/${type[0]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-          .then(res => {
-              movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
-              axios.get(`/${getState().movies.mode}/${type[1]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                  .then(res => {
-                      movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
-                      console.log("[MOVIES ARE]",movies)
-                      dispatch(setMovies(movies))
-                  });
-          });
+    return (dispatch, getState) => {
+        dispatch(errorFalse());
+        dispatch(loadingTrue());
+        let movies = [];
+        setTimeout(() => {
+            axios.get(`/${getState().movies.mode}/${type[0]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+                .then(res => {
+                    movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
+                    axios.get(`/${getState().movies.mode}/${type[1]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+                        .then(res => {
+                            movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
+                            console.log("[MOVIES ARE]", movies)
+                            dispatch(setMovies(movies))
+                            dispatch(loadingFalse());
+                        })
+                        .catch(err => {
+                            dispatch(errorTrue())
+                        })
+                })
+                .catch(err => {
+                    dispatch(errorTrue())
+                })
+        }, 1500)
 
-  }
+
+    }
 };
 const getGenres = (data) => {
-    return{
+    return {
         type: actionTypes.GET_GENRES,
         payload: {
             genres: data
@@ -68,11 +100,14 @@ const getGenres = (data) => {
     }
 };
 export const getGenresInit = () => {
+
     return (dispatch, getState) => {
+        //dispatch(loadingTrue());
         axios.get(`/genre/${getState().movies.mode}/list?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(res => {
                 dispatch(getGenres(res.data.genres))
                 localStorage.setItem('genders', JSON.stringify(res.data.genres))
+                //dispatch(loadingFalse());
             });
     }
 }
@@ -88,13 +123,16 @@ const searchMoviesByInputSuccess = (data, page, total_pages) => {
 };
 export const searchMoviesByInput = (input) => {
     return (dispatch, getState) => {
+        //dispatch(loadingTrue());
+        dispatch(errorFalse());
         let state = getState();
         axios.get(`/search/${state.movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}`)
             .then(res => {
                 dispatch(searchMoviesByInputSuccess(res.data.results, res.data.page, res.data.total_pages));
+                //dispatch(loadingFalse());
             })
             .catch(err => {
-                console.log(err)
+                dispatch(errorTrue());
             })
     }
 };
@@ -111,12 +149,18 @@ export const searchMoviesBySubtypeSuccess = (data, page, total_pages, value) => 
 };
 export const searchMoviesBySubtype = (val) => {
     return (dispatch, getState) => {
+        //dispatch(loadingTrue());
+        dispatch(errorFalse());
         axios.get(`${getState().movies.mode}/${val}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(res => {
                 dispatch(searchMoviesBySubtypeSuccess(res.data.results, res.data.page, res.data.total_pages, val));
+                //dispatch(loadingFalse());
+            })
+            .catch(err => {
+                dispatch(errorTrue());
             })
     }
-}
+};
 export const searchMoviesReset = () => {
     return {
         type: actionTypes.SEARCH_MOVIES_RESET
@@ -139,17 +183,29 @@ const searchMoviesChangePageSuccess = (data, page) => {
 export const searchMoviesChangePage = (type, val, input) => {
     if (type === "subtype") {
         return (dispatch, getState) => {
+            dispatch(errorFalse());
+            //dispatch(loadingTrue());
             axios.get(`/${getState().movies.mode}/${getState().movies.searchValue}?api_key=ea5e1bdf1c365782c88c209eca44f80f&page=${val}`)
                 .then(res => {
                     dispatch(searchMoviesChangePageSuccess(res.data.results, res.data.page));
+                    //dispatch(loadingFalse());
+                })
+                .catch(err => {
+                    dispatch(errorTrue());
                 })
         }
     } else {
         return (dispatch, getState) => {
+            dispatch(errorFalse());
+            //dispatch(loadingTrue());
             axios.get(`/search/${getState.movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}&page=${val}`)
                 .then(res => {
                     dispatch(searchMoviesChangePageSuccess(res.data.results, res.data.page));
                     dispatch(searchTypeReset())
+                    //dispatch(loadingFalse());
+                })
+                .catch(err =>{
+                    dispatch(errorTrue());
                 })
         }
     }

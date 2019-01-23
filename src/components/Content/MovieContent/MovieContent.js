@@ -32,7 +32,7 @@ const movieContent = (props) => {
                         <IconContext.Provider value={{size: "3em", color: "#c4302b", className: "global-class-name"}}>
                             <div className={classes.Content__Links}>
                                 <h4>Watch Trailer</h4>
-                                <FaYoutube onClick={props.openTrailer}/>
+                                <FaYoutube className={classes.Trailer} onClick={props.openTrailer}/>
                             </div>
                         </IconContext.Provider>
                     </div>

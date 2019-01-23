@@ -16,6 +16,8 @@ const initialState = {
         {value: "top_rated", displayValue: "Top Rated"}
         ],
     initialSearchMode: true,
+    loading: false,
+    error: false
 };
 
 export default (state = initialState, action) => {
@@ -82,6 +84,10 @@ export default (state = initialState, action) => {
                 ...state,
                 initialSearch: initial()
             };
+        case actionTypes.LOADING_TRUE:
+            return{...state, loading: true};
+        case actionTypes.LOADING_FALSE:
+            return{...state, loading: false};
         default:
             return state
     }

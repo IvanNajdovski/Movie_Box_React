@@ -12,7 +12,8 @@ import {
     getCreditsForPerson
 } from "../../store/actions";
 
-import Loader from 'react-loader-spinner'
+import NetworkError from '../../components/ErrorPages/NetworkError/NetworkError';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Movie.module.scss';
 import MovieList from "../../components/MovieList/MovieList";
 import MovieContent from '../../components/Content/MovieContent/MovieContent';
@@ -89,7 +90,11 @@ class Movie extends Component {
                 content = <PersonContent item={this.props.movie}/>
             }
         }
-        if (this.props.similarMovies && this.props.credits && this.props.movie) {
+        if(this.props.error){
+            data = <NetworkError color={'#000'}/>
+        }else if(this.props.loading){
+            data = <Spinner color={"#6e5514"}/>
+        } else if (this.props.similarMovies && this.props.credits && this.props.movie) {
             data = (
                 <React.Fragment>
                     <SideCard left
@@ -111,13 +116,13 @@ class Movie extends Component {
                         </div>
                     </div>
                 </React.Fragment>
-            )
+            );
             cast = <MovieList mode={this.props.mode} movies={this.props.credits}/>
         }
 
         return (
             <div style={{backgroundColor: "#000", position: "relative"}}>
-                <Loader type="Triangle" color="#fff" height={80} width={80} />
+
                 {this.props.showTrailer ? <Backdrop><Modal/></Backdrop> : null}
                 {data}
                 <h4>Featuring</h4>
@@ -133,7 +138,9 @@ const mapStateToProps = state => {
         showTrailer: state.trailer.show,
         movie: state.movie.movie,
         similarMovies: state.movie.similarMovies,
-        credits: state.movie.credits
+        credits: state.movie.credits,
+        loading: state.movie.loading,
+        error: state.movie.error,
     }
 };
 

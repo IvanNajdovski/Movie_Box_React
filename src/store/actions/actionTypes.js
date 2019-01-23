@@ -27,3 +27,8 @@ export const SET_SIMILAR_MOVIES = "SET_SIMILAR_MOVIES";
 export const SET_CREDITS = "SET_CREDITS";
 export const RESET_DATA = "RESET_DATA";
 export const RESET_SIMILAR_MOVIES = "RESET_SIMILAR_MOVIES";
+
+export const LOADING_TRUE = "LOADING_TRUE";
+export const LOADING_FALSE = "LOADING_FALSE";
+export const ERROR_TRUE = "ERROR_TRUE";
+export const ERROR_FALSE = "ERROR_FALSE";

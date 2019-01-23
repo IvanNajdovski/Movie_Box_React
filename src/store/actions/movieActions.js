@@ -3,7 +3,6 @@ import axios from "../../axios/axiosOrders";
 import updateObjectWithType from "../../utils/updateObjectWithType";
 
 const setMovie = (data) => {
-    console.log("[DATA]",data)
     return {
         type: actionTypes.SET_MOVIE,
         payload: {
@@ -22,10 +21,18 @@ export const setTypeAndId = (type, id) => {
 };
 export const getMovie = (type, id) => {
     return dispatch => {
-        axios.get(`/${type}/${id}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-            .then(res => {
-                dispatch(setMovie({...res.data, type}))
-            });
+        dispatch(loadingTrue());
+
+            axios.get(`/${type}/${id}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+                .then(res => {
+                    dispatch(setMovie({...res.data, type}))
+                    dispatch(loadingFalse());
+                })
+                .catch(err => {
+                    dispatch(errorTrue())
+                })
+
+
     }
 };
 const setSimilarMovies = data => {
@@ -37,13 +44,17 @@ const setSimilarMovies = data => {
     }
 };
 export const getSimilarMovies = (type, id) => {
+
     return dispatch =>{
+        dispatch(errorFalse())
         axios.get(`/${type}/${id}/similar?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(res => {
                 const similarMovies = updateObjectWithType(res.data.results, type)
-                console.log(res.data)
                 dispatch(setSimilarMovies(similarMovies))
-            });
+            })
+            .catch(err => {
+                dispatch(errorTrue())
+            })
     }
 };
 const setCredits = (data) => {
@@ -55,17 +66,22 @@ const setCredits = (data) => {
     }
 };
 export const getCredits = (type, id, credit) => {
-    console.log(credit)
+
     return dispatch => {
+        dispatch(errorFalse())
         axios.get(`/${type}/${id}/${credit !== "person" ? `${credit}_` : "" }credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(response => {
                 let items = updateObjectWithType(response.data.cast, credit);
                 dispatch(setCredits(items))
             })
+            .catch(err => {
+                dispatch(errorTrue())
+            })
     }
 };
 export const getCreditsForPerson = (type,id) => {
     return dispatch => {
+        dispatch(errorFalse())
         axios.get(`/${type}/${id}/movie_credits?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
             .then(res => {
                 let movieItems = updateObjectWithType(res.data.cast, "movie");
@@ -75,6 +91,12 @@ export const getCreditsForPerson = (type,id) => {
                         const items = [...movieItems, ...tvItems];
                         dispatch(setCredits(items))
                     })
+                    .catch(err => {
+                        dispatch(errorTrue())
+                    })
+            })
+            .catch(err => {
+                dispatch(errorTrue())
             })
     }
 };
@@ -87,4 +109,24 @@ export const resetSimilarMovies = () => {
     return{
         type: actionTypes.RESET_SIMILAR_MOVIES
     }
-}
+};
+const loadingTrue = () => {
+    return{
+        type: actionTypes.LOADING_TRUE
+    }
+};
+const loadingFalse = () => {
+    return{
+        type: actionTypes.LOADING_FALSE
+    }
+};
+const errorTrue = () => {
+    return{
+        type: actionTypes.ERROR_TRUE
+    }
+};
+const errorFalse = () => {
+    return{
+        type: actionTypes.ERROR_FALSE
+    }
+};

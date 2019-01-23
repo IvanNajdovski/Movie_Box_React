@@ -14,6 +14,7 @@ import {
     initialSearchType
 } from '../../store/actions';
 
+import Spinner from '../../components/UI/Spinner/Spinner';
 import Transition from 'react-transition-group/Transition';
 import Input from '../../components/UI/Input/Input';
 import InputWrapper from '../../components/UI/InputWrapper/InputWrapper';
@@ -21,6 +22,7 @@ import PresentationBox from '../../components/PresentationBox/PresentationBox';
 import MovieList from '../../components/MovieList/MovieList';
 import MovieSearchList from '../../components/MovieSearchList/MovieSearchList';
 import PageSearch from '../../components/UI/PageSearch/PageSearch';
+import NetworkError from '../../components/ErrorPages/NetworkError/NetworkError'
 
 
 const MOVIE_SUBVALUES = [
@@ -82,7 +84,8 @@ class MainContent extends Component {
         if (this.props.searchedMovies) {
             movies = <MovieSearchList movies={this.props.searchedMovies}/>
         }
-        let presentationBox = <div></div>
+        let presentationBox = this.props.loading ? <Spinner color={"#000"}/> : <div></div>
+
         let initialMovies = null;
         let values = null
         if (this.props.initialMovies) {
@@ -128,8 +131,11 @@ class MainContent extends Component {
                     </Transition>
                 </React.Fragment>
             )
+        }else if (this.props.error){
+            presentationBox = <NetworkError/>
         }
         return (
+
             <React.Fragment>
                 {initialMovies}
                 <InputWrapper>
@@ -178,7 +184,9 @@ const mapStateToProps = state => {
         searchType: state.movies.searchType,
         searchValue: state.movies.searchValue,
         initialMovies: state.movies.initialMovies,
-        initialSearchMode: state.movies.initialSearchMode
+        initialSearchMode: state.movies.initialSearchMode,
+        loading: state.movies.loading,
+        error: state.movies.error
 
 
     }
