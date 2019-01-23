@@ -9,6 +9,9 @@
   color: inherit;
   border: 1px solid #ccc;
   border-radius: 5px;
+  @media only screen and (max-width: 1000px){
+    width: 80%;
+  }
 
   & h3{
     color: #000;

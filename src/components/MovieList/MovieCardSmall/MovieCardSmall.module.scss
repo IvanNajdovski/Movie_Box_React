@@ -8,6 +8,7 @@
   flex-direction: column;
   text-decoration: none;
   font-family: "Cinzel";
+
   & img {
     border-radius: 10px;
     width: 100%;
@@ -42,11 +43,12 @@
   margin: 5px;
   border-radius: 10px;
   box-shadow: 2px 5px 10px #432d32;
-  flex: 1 0 180px;
+  flex: 1 1 180px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-decoration: none;
+  max-width: 230px;
   & img {
     border-radius: 10px;
     width: 100%;
