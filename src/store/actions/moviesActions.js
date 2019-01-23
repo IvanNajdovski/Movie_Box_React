@@ -75,8 +75,7 @@ export const getMoviesInit = (type) => {
                     axios.get(`/${getState().movies.mode}/${type[1]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
                         .then(res => {
                             movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
-                            console.log("[MOVIES ARE]", movies)
-                            dispatch(setMovies(movies))
+                            dispatch(setMovies(movies));
                             dispatch(loadingFalse());
                         })
                         .catch(err => {
@@ -123,13 +122,12 @@ const searchMoviesByInputSuccess = (data, page, total_pages) => {
 };
 export const searchMoviesByInput = (input) => {
     return (dispatch, getState) => {
-        //dispatch(loadingTrue());
+
         dispatch(errorFalse());
-        let state = getState();
-        axios.get(`/search/${state.movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}`)
+        axios.get(`/search/${getState().movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}`)
             .then(res => {
                 dispatch(searchMoviesByInputSuccess(res.data.results, res.data.page, res.data.total_pages));
-                //dispatch(loadingFalse());
+
             })
             .catch(err => {
                 dispatch(errorTrue());
@@ -198,7 +196,7 @@ export const searchMoviesChangePage = (type, val, input) => {
         return (dispatch, getState) => {
             dispatch(errorFalse());
             //dispatch(loadingTrue());
-            axios.get(`/search/${getState.movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}&page=${val}`)
+            axios.get(`/search/${getState().movies.mode}?api_key=ea5e1bdf1c365782c88c209eca44f80f&query=${input}&page=${val}`)
                 .then(res => {
                     dispatch(searchMoviesChangePageSuccess(res.data.results, res.data.page));
                     dispatch(searchTypeReset())
@@ -209,4 +207,4 @@ export const searchMoviesChangePage = (type, val, input) => {
                 })
         }
     }
-}
+};

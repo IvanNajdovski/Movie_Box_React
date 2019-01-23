@@ -167,6 +167,8 @@ class MainContent extends Component {
                     </Transition>
                 </div>
                 {movies}
+                {this.props.totalPages ? <PageSearch page={this.props.page} total_pages={this.props.totalPages}
+                                                     pageChange={this.onPageChangeHandler}/> : null}
             </React.Fragment>
         )
     }

@@ -5,7 +5,7 @@ class Modal extends Component {
     render(){
         return(
             <React.Fragment>
-                <iframe width="800" height="500" src={`https://www.youtube.com/embed/${this.props.trailerId}?autoplay=true`} frameBorder={"0"} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen>
+                <iframe title={"MovieTitle"} width="800" height="500" src={`https://www.youtube.com/embed/${this.props.trailerId}?autoplay=true`} frameBorder={"0"} allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen>
 
                 </iframe>
             </React.Fragment>
