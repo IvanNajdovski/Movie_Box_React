@@ -71,6 +71,7 @@ export const getMoviesInit = (type) => {
         setTimeout(() => {
             axios.get(`/${getState().movies.mode}/${type[0]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
                 .then(res => {
+                    
                     movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
                     axios.get(`/${getState().movies.mode}/${type[1]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
                         .then(res => {

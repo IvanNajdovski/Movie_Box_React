@@ -20,6 +20,9 @@
     animation: scale;
     animation-duration: 400ms;
     animation-iteration-count: 1;
+    @media only screen and(max-width: 600px){
+        width: 100%;
+    }
 
 }
 

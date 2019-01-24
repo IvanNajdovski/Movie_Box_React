@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import classes from './MainContent.module.css';
+import classes from './MainContent.module.scss';
 import {connect} from 'react-redux';
 import {
     styleChangeLight,
@@ -89,7 +89,7 @@ class MainContent extends Component {
         let initialMovies = null;
         let values = null
         if (this.props.initialMovies) {
-            values =(
+            values = (
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <h2>{this.props.initialSearch[0].displayValue}</h2>
                     <h2>{this.props.initialSearch[1].displayValue}</h2>
@@ -131,7 +131,7 @@ class MainContent extends Component {
                     </Transition>
                 </React.Fragment>
             )
-        }else if (this.props.error){
+        } else if (this.props.error) {
             presentationBox = <NetworkError/>
         }
         return (

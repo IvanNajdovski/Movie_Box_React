@@ -17,7 +17,7 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter>
+        <BrowserRouter basename={"/movie_box"}>
             <App/>
         </BrowserRouter>
     </Provider>

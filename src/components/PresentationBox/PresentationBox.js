@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from  "./PresenationBox.module.css"
+import classes from "./PresenationBox.module.scss"
 
 import BigBox from './BoxBig/BoxBig';
 import BoxSmall from './BoxSmall/BoxSmall';

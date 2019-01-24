@@ -1,0 +1,71 @@
+.MainContentWrapper {
+  width: 1000px;
+  margin: 50px auto;
+  font-family: "Cinzel";
+  @media only screen and(max-width: 1000px) {
+    width: 800px;
+  }
+  @media only screen and(max-width: 800px) {
+    width: 600px;
+
+  }
+  @media only screen and(max-width: 600px) {
+    width: 90%;
+
+  }
+
+}
+
+.MainContent {
+  display: flex;
+  background-color: #fff;
+  height: 500px;
+  @media only screen and(max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+  }
+  @media only screen and(max-width: 400px) {
+
+    height: 800px;
+  }
+}
+
+.SubmodeItems {
+
+  list-style: none;
+  cursor: pointer;
+  font-family: "Cinzel";
+  font-size: 12px;
+  font-weight: 900;
+  padding: 0px 5px;
+  outline: none;
+  border: none;
+  background-color: inherit;
+  display: inline-block;
+
+}
+
+.SubmodeItems:disabled {
+
+  color: #7b7b7b;
+  cursor: not-allowed;
+
+}
+
+.SubmodeList {
+  margin: 0;
+  display: flex;
+  position: absolute;
+  left: 0;
+  @media only screen and(max-width: 600px) {
+    left: 5%;
+    top: 150%;
+    //transform: translateX(-50%);
+  }
+  @media only screen and(max-width: 400px) {
+    left: 0;
+    top: 150%;
+    //transform: translateX(-50%);
+  }
+}
