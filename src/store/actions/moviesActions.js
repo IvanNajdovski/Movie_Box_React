@@ -37,12 +37,12 @@ const loadingFalse = () => {
     }
 };
 const errorTrue = () => {
-    return{
+    return {
         type: actionTypes.ERROR_TRUE
     }
 };
 const errorFalse = () => {
-    return{
+    return {
         type: actionTypes.ERROR_FALSE
     }
 };
@@ -68,26 +68,25 @@ export const getMoviesInit = (type) => {
         dispatch(errorFalse());
         dispatch(loadingTrue());
         let movies = [];
-        setTimeout(() => {
-            axios.get(`/${getState().movies.mode}/${type[0]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                .then(res => {
-                    
-                    movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
-                    axios.get(`/${getState().movies.mode}/${type[1]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
-                        .then(res => {
-                            movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
-                            dispatch(setMovies(movies));
-                            dispatch(loadingFalse());
-                        })
-                        .catch(err => {
-                            dispatch(errorTrue())
-                        })
-                })
-                .catch(err => {
-                    dispatch(errorTrue())
-                })
-        }, 1500)
 
+        axios.get(`/${getState().movies.mode}/${type[0]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+            .then(res => {
+
+                movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
+                axios.get(`/${getState().movies.mode}/${type[1]}?api_key=ea5e1bdf1c365782c88c209eca44f80f`)
+                    .then(res => {
+                        movies.push(updateObject(res.data.results, getState().movies.mode, getState().movies.genres))
+                        dispatch(setMovies(movies));
+                        dispatch(loadingFalse());
+                    })
+                    .catch(err => {
+                        dispatch(errorTrue())
+                    })
+            })
+            .catch(err => {
+                dispatch(errorTrue())
+            })
+       
 
     }
 };
@@ -203,7 +202,7 @@ export const searchMoviesChangePage = (type, val, input) => {
                     dispatch(searchTypeReset())
                     //dispatch(loadingFalse());
                 })
-                .catch(err =>{
+                .catch(err => {
                     dispatch(errorTrue());
                 })
         }
